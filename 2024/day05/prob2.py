@@ -13,18 +13,27 @@ def ordered(update, orders) :
     return True
 
 
+def inf(n, m, orders) :
+    if n not in orders :
+        return True
+    for order in orders[n] :
+        if order[0] == m :
+            return False
+    return True
+
+
 def sort(update, orders) :
-    while not ordered(update, orders) :
-        for i in range(len(update)-1) :
-            for j in range(i+1, len(update)) :
-                n = update[i]
-                m = update[j]
-                if n in orders.keys() :
-                    for order in orders[n] :
-                        if order[0] == m :
-                            update[i] = m
-                            update[j] = n
-    return update
+    if len(update) == 0 or len(update) == 1 :
+        return update
+    pivot = update[0]
+    left, center, right = [], [pivot], []
+    for i in range(1, len(update)) :
+        n = update[i]
+        if inf(pivot, n, orders) :
+            right.append(n)
+        else :
+            left.append(n)
+    return sort(left, orders) + center + sort(right, orders)
 
 
 if __name__ == "__main__" :
